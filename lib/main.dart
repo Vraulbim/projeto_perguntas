@@ -7,32 +7,33 @@ main() => runApp(const PerguntaApp());
 
 class _PerguntaAppState extends State<PerguntaApp> {
   var _perguntaSelecionada = 0;
+  var _pontuacaoTotal = 0;
   final _perguntas = const [
       {
         'pergunta': 'Qual é sua linguaguem favorita?',
         'respostas': [
-          'C#', 
-          'JavaScript', 
-          'Dart', 
-          'Java'
+          {'texto': 'C#', 'nota': 10}, 
+          {'texto': 'JavaScript', 'nota': 0}, 
+          {'texto': 'Dart', 'nota': 9},          
+          {'texto': 'Java', 'nota': 8}
           ]
       },
       {
         'pergunta': 'Qual seu framework favorito?',
         'respostas': [
-          'Asp.Net Core',
-          'Asp.Net MVC',
-          'Flutter',
-          'Ionic'
+          {'texto': 'Asp.Net Core', 'nota': 10},
+          {'texto': 'Asp.Net MVC', 'nota': 7},
+          {'texto': 'Flutter', 'nota': 10},
+          {'texto': 'Ionic', 'nota': 8}
           ]
       },
       {
         'pergunta': 'Qual sua IDE favorita?',
         'respostas': [
-          'IntelliJ IDEA',
-          'VSCode',
-          'Visual Studio',
-          'Android Studio'
+          {'texto': 'IntelliJ IDEA', 'nota': 10},
+          {'texto': 'VSCode', 'nota': 10},
+          {'texto': 'Android Studio', 'nota': 6},
+          {'texto': 'Bloco de Notas', 'nota': 4}          
         ]
       }
     ];  
@@ -41,12 +42,20 @@ class _PerguntaAppState extends State<PerguntaApp> {
     return _perguntaSelecionada < _perguntas.length;
   }
 
-  void responder() {
+  void responder(int nota) {
     if(temPerguntaSelecionada){
       setState(() {
       _perguntaSelecionada++;
+      _pontuacaoTotal += nota;
     });
     }
+  }
+
+  void _reiniciarQuestionario(){
+    setState(() {
+      _perguntaSelecionada = 0;
+      _pontuacaoTotal = 0;
+    });
   }
 
   @override
@@ -62,7 +71,7 @@ class _PerguntaAppState extends State<PerguntaApp> {
           body: temPerguntaSelecionada ? Questionario(
             perguntas: _perguntas, 
             perguntaSelecionada: _perguntaSelecionada, 
-            responder: responder) : const Resultado()
+            responder: responder) : Resultado(_pontuacaoTotal, _reiniciarQuestionario)
           ),
     );
   }
